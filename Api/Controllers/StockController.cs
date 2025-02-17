@@ -36,9 +36,9 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateStockRequestDto stockDto)
+        public IActionResult Create([FromBody] CreateStockRequestDto createStockRequestDto)
         {
-            var stockModel = stockDto.ToStockFromCreateDto();
+            var stockModel = createStockRequestDto.ToStockFromCreateDto();
             _context.Stocks.Add(stockModel);
             _context.SaveChanges();
 
