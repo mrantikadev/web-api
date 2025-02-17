@@ -1,7 +1,9 @@
 ﻿using Api.Data;
 using Api.Dtos.Stock;
 using Api.Mappers;
+using Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Api.Controllers
 {
@@ -43,6 +45,27 @@ namespace Api.Controllers
             _context.SaveChanges();
 
             return CreatedAtAction(nameof(GetById), new { id = stockModel.StockId }, stockModel.ToStockDto());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateStockRequestDto updateStockRequestDto)
+        {
+            var stockModel = _context.Stocks.FirstOrDefault(x => x.StockId == id);
+
+            if (stockModel == null)
+                return NotFound();
+
+            stockModel.Symbol = updateStockRequestDto.Symbol;
+            stockModel.CompanyName = updateStockRequestDto.CompanyName;
+            stockModel.Purchase = updateStockRequestDto.Purchase;
+            stockModel.LastDiv = updateStockRequestDto.LastDiv;
+            stockModel.Industry = updateStockRequestDto.Industry;
+            stockModel.MarketCap = updateStockRequestDto.MarketCap;
+
+            _context.SaveChanges();
+
+            return Ok(stockModel.ToStockDto());
         }
     }
 }
