@@ -32,10 +32,12 @@ namespace Api.Repository
 
             if (!string.IsNullOrWhiteSpace(query.SortBy))
             {
-                if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+                stocks = query.SortBy.ToLower() switch
                 {
-                    stocks = query.IsDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
-                }
+                    "symbol" => query.IsDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol),
+                    "companyname" => query.IsDescending ? stocks.OrderByDescending(s => s.CompanyName) : stocks.OrderBy(s => s.CompanyName),
+                    _ => stocks
+                };
             }
 
             return await stocks.ToListAsync();
