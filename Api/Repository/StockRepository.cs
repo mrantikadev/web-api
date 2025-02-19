@@ -40,6 +40,8 @@ namespace Api.Repository
                 };
             }
 
+            var pageNumber = query.PageNumber < 1 ? 1 : query.PageNumber;
+            var pageSize = query.PageSize > 100 ? 100 : query.PageSize;
             var skipNumber = (query.PageNumber - 1) * query.PageSize;
 
             return await stocks.Skip(skipNumber).Take(query.PageSize).ToListAsync();
